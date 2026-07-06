@@ -49,4 +49,4 @@ ScribeTp2/
 
 ### Q1 — Pourquoi le `.gitignore` doit exister avant d'écrire la moindre ligne de code manipulant des secrets ?
 
-*(à compléter)*
+Parce que Git suit l'historique, pas seulement l'état courant : dès qu'un fichier contenant une clé (par exemple `.env`) est commité une seule fois, cette clé reste consultable dans l'historique même si le fichier est supprimé ou modifié ensuite (`git log`, `git show`, clone du dépôt...). La retirer après coup demande de réécrire l'historique (`git filter-repo`, `BFG`...), ce qui est lourd, risqué sur un dépôt déjà partagé, et n'empêche pas qu'elle ait déjà pu être exposée (dépôt public, fork, clone local d'un collaborateur). Mettre en place le `.gitignore` avant d'introduire `.env` évite structurellement qu'un `git add` ou un `git add -A` n'inclue le secret par erreur : la protection est en place avant que le risque n'existe.
