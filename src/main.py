@@ -2,11 +2,14 @@
 
 import argparse
 import datetime
+import os
 import sys
 
 from transcription import transcribe
 from moderation import is_legitimate
 from summary import summarize
+
+TRANSCRIPTIONS_DIR = "transcriptions"
 
 
 def main() -> None:
@@ -19,6 +22,13 @@ def main() -> None:
         transcript = transcribe(args.audio_path)
     except (FileNotFoundError, RuntimeError) as exc:
         sys.exit(f"Erreur : {exc}")
+
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    os.makedirs(TRANSCRIPTIONS_DIR, exist_ok=True)
+    transcript_path = os.path.join(TRANSCRIPTIONS_DIR, f"transcription-{timestamp}.txt")
+    with open(transcript_path, "w", encoding="utf-8") as f:
+        f.write(transcript)
+    print(f"Transcription brute sauvegardée dans {transcript_path}")
 
     print("Vérification du contenu...")
     try:
@@ -38,7 +48,6 @@ def main() -> None:
 
     print("\n" + report)
 
-    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     output_path = f"compte-rendu-{timestamp}.md"
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(report)
