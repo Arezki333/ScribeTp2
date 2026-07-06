@@ -1,0 +1,22 @@
+# Environnement virtuel
+venv/
+env/
+.venv/
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Sorties générées
+*.log
+compte-rendu-*.md
+
+# OS / éditeurs
+.DS_Store
+.vscode/
+.idea/
