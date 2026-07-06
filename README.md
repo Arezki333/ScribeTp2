@@ -17,7 +17,11 @@ source venv/bin/activate  # Windows : venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Une clé API Groq est nécessaire (voir [console.groq.com](https://console.groq.com)). Elle se configure via un fichier `.env` (détails à venir à l'étape *Configuration*).
+Une clé API Groq est nécessaire (voir [console.groq.com](https://console.groq.com)). Copiez `.env.example` vers `.env` et renseignez votre clé :
+
+```bash
+cp .env.example .env
+```
 
 ## Utilisation
 
@@ -43,7 +47,14 @@ ScribeTp2/
 
 ## Choix des modèles
 
-*(à compléter à l'étape Configuration — Q2)*
+Les identifiants des modèles sont centralisés dans [src/config.py](src/config.py), seul endroit du projet où ils apparaissent.
+
+### Q2 — Quels modèles STT et LLM propose Groq, et lesquels choisit-on ?
+
+Groq propose notamment, côté Speech-to-Text, `whisper-large-v3` et `whisper-large-v3-turbo` (et une variante distillée anglais-only, `distil-whisper-large-v3-en`) ; côté LLM, plusieurs modèles Llama (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`), ainsi que d'autres familles (Gemma, DeepSeek, GPT-OSS...).
+
+- **STT — `whisper-large-v3-turbo`** : quasiment la même qualité de transcription que `whisper-large-v3` sur la plupart des langues, mais nettement plus rapide et moins coûteuse grâce à l'infrastructure LPU de Groq — un bon compromis pour transcrire de courts enregistrements (réunions, notes vocales) sans sacrifier la fidélité du texte.
+- **LLM — `llama-3.3-70b-versatile`** : modèle 70B généraliste, plus fiable qu'un modèle 8B pour suivre des instructions de formatage précises (titre, points clés, décisions) et pour éviter d'halluciner du contenu absent de la transcription. Le coût et la latence supplémentaires restent raisonnables sur ce cas d'usage (un compte rendu, pas un chat temps réel à fort volume).
 
 ## Réponses aux questions
 
