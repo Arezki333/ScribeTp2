@@ -15,6 +15,7 @@ __pycache__/
 # Sorties générées
 *.log
 compte-rendu-*.md
+transcriptions/*.txt
 
 # OS / éditeurs
 .DS_Store
