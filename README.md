@@ -30,7 +30,14 @@ cp .env.example .env
 python src/main.py audio/samples/exemple.mp3
 ```
 
-Le programme affiche la progression (transcription puis rédaction), imprime le compte rendu à l'écran, et le sauvegarde dans un fichier `compte-rendu-AAAAMMJJ-HHMMSS.md` à la racine du projet.
+Le programme affiche la progression (transcription, modération, rédaction), imprime le compte rendu à l'écran, et sauvegarde :
+- la transcription brute dans `transcriptions/transcription-AAAAMMJJ-HHMMSS.txt`
+- le compte rendu structuré dans `compte-rendu-AAAAMMJJ-HHMMSS.md` (racine du projet)
+
+`audio/samples/` contient trois exemples pour tester les différents cas :
+- `exemple.wav` : réunion avec une décision claire
+- `exemple-sans-decision.wav` : note sans aucune décision (la section correspondante doit rester vide dans le compte rendu)
+- `exemple-detournement.wav` : tentative de détournement de l'outil (doit être rejetée par la modération)
 
 ## Structure du projet
 
