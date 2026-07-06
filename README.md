@@ -60,6 +60,14 @@ Groq propose notamment, côté Speech-to-Text, `whisper-large-v3` et `whisper-la
 
 En `response_format=verbose_json`, l'API renvoie, en plus du texte : la langue détectée, la durée totale, et une liste de segments horodatés (début/fin en secondes, texte du segment, score de confiance). Utile pour une évolution future de Scribe : les timestamps par segment permettraient de relier chaque point du compte rendu à un instant précis de l'audio (navigation cliquable), et la langue détectée permettrait d'adapter automatiquement la langue du prompt système envoyé au LLM.
 
+### Q4 — Quelle température pour le compte rendu, et pourquoi ?
+
+`temperature=0.2` (voir [src/summary.py](src/summary.py)) : une valeur basse rend la sortie plus déterministe et factuelle, ce qui limite le risque que le modèle reformule de façon trop créative ou invente des détails absents de la transcription — cohérent avec la règle « le LLM ne doit rien inventer ».
+
+### Q5 — Le prompt système est envoyé à chaque requête : quel lien avec les tokens en cache ?
+
+Le prompt système ([prompts/summary_system_prompt.txt](prompts/summary_system_prompt.txt)) est identique à chaque appel, seul le contenu utilisateur (la transcription) change. Les providers comme Groq mettent en cache le préfixe commun d'un prompt (le début identique entre plusieurs requêtes) : les tokens de ce préfixe sont facturés moins cher et traités plus vite qu'un token « frais », car le modèle n'a pas besoin de recalculer son état interne pour cette partie stable. Garder le prompt système inchangé (au lieu de le régénérer dynamiquement) maximise ce bénéfice de cache.
+
 ## Réponses aux questions
 
 ### Q1 — Pourquoi le `.gitignore` doit exister avant d'écrire la moindre ligne de code manipulant des secrets ?
