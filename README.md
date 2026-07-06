@@ -49,6 +49,12 @@ ScribeTp2/
 
 Les identifiants des modèles sont centralisés dans [src/config.py](src/config.py), seul endroit du projet où ils apparaissent.
 
+## Réponses aux questions
+
+### Q1 — Pourquoi le `.gitignore` doit exister avant d'écrire la moindre ligne de code manipulant des secrets ?
+
+Parce que Git suit l'historique, pas seulement l'état courant : dès qu'un fichier contenant une clé (par exemple `.env`) est commité une seule fois, cette clé reste consultable dans l'historique même si le fichier est supprimé ou modifié ensuite (`git log`, `git show`, clone du dépôt...). La retirer après coup demande de réécrire l'historique (`git filter-repo`, `BFG`...), ce qui est lourd, risqué sur un dépôt déjà partagé, et n'empêche pas qu'elle ait déjà pu être exposée (dépôt public, fork, clone local d'un collaborateur). Mettre en place le `.gitignore` avant d'introduire `.env` évite structurellement qu'un `git add` ou un `git add -A` n'inclue le secret par erreur : la protection est en place avant que le risque n'existe.
+
 ### Q2 — Quels modèles STT et LLM propose Groq, et lesquels choisit-on ?
 
 Groq propose notamment, côté Speech-to-Text, `whisper-large-v3` et `whisper-large-v3-turbo` (et une variante distillée anglais-only, `distil-whisper-large-v3-en`) ; côté LLM, plusieurs modèles Llama (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`), ainsi que d'autres familles (Gemma, DeepSeek, GPT-OSS...).
@@ -68,8 +74,3 @@ En `response_format=verbose_json`, l'API renvoie, en plus du texte : la langue d
 
 Le prompt système ([prompts/summary_system_prompt.txt](prompts/summary_system_prompt.txt)) est identique à chaque appel, seul le contenu utilisateur (la transcription) change. Les providers comme Groq mettent en cache le préfixe commun d'un prompt (le début identique entre plusieurs requêtes) : les tokens de ce préfixe sont facturés moins cher et traités plus vite qu'un token « frais », car le modèle n'a pas besoin de recalculer son état interne pour cette partie stable. Garder le prompt système inchangé (au lieu de le régénérer dynamiquement) maximise ce bénéfice de cache.
 
-## Réponses aux questions
-
-### Q1 — Pourquoi le `.gitignore` doit exister avant d'écrire la moindre ligne de code manipulant des secrets ?
-
-Parce que Git suit l'historique, pas seulement l'état courant : dès qu'un fichier contenant une clé (par exemple `.env`) est commité une seule fois, cette clé reste consultable dans l'historique même si le fichier est supprimé ou modifié ensuite (`git log`, `git show`, clone du dépôt...). La retirer après coup demande de réécrire l'historique (`git filter-repo`, `BFG`...), ce qui est lourd, risqué sur un dépôt déjà partagé, et n'empêche pas qu'elle ait déjà pu être exposée (dépôt public, fork, clone local d'un collaborateur). Mettre en place le `.gitignore` avant d'introduire `.env` évite structurellement qu'un `git add` ou un `git add -A` n'inclue le secret par erreur : la protection est en place avant que le risque n'existe.
