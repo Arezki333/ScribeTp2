@@ -26,10 +26,10 @@ cp .env.example .env
 ## Utilisation
 
 ```bash
-python src/main.py chemin/vers/audio.mp3
+python src/main.py audio/samples/exemple.mp3
 ```
 
-*(à compléter au fil du TP)*
+Le programme affiche la progression (transcription puis rédaction), imprime le compte rendu à l'écran, et le sauvegarde dans un fichier `compte-rendu-AAAAMMJJ-HHMMSS.md` à la racine du projet.
 
 ## Structure du projet
 
