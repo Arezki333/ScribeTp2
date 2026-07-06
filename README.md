@@ -56,6 +56,10 @@ Groq propose notamment, côté Speech-to-Text, `whisper-large-v3` et `whisper-la
 - **STT — `whisper-large-v3-turbo`** : quasiment la même qualité de transcription que `whisper-large-v3` sur la plupart des langues, mais nettement plus rapide et moins coûteuse grâce à l'infrastructure LPU de Groq — un bon compromis pour transcrire de courts enregistrements (réunions, notes vocales) sans sacrifier la fidélité du texte.
 - **LLM — `llama-3.3-70b-versatile`** : modèle 70B généraliste, plus fiable qu'un modèle 8B pour suivre des instructions de formatage précises (titre, points clés, décisions) et pour éviter d'halluciner du contenu absent de la transcription. Le coût et la latence supplémentaires restent raisonnables sur ce cas d'usage (un compte rendu, pas un chat temps réel à fort volume).
 
+### Q3 — Que renvoie l'API de transcription en plus du texte ?
+
+En `response_format=verbose_json`, l'API renvoie, en plus du texte : la langue détectée, la durée totale, et une liste de segments horodatés (début/fin en secondes, texte du segment, score de confiance). Utile pour une évolution future de Scribe : les timestamps par segment permettraient de relier chaque point du compte rendu à un instant précis de l'audio (navigation cliquable), et la langue détectée permettrait d'adapter automatiquement la langue du prompt système envoyé au LLM.
+
 ## Réponses aux questions
 
 ### Q1 — Pourquoi le `.gitignore` doit exister avant d'écrire la moindre ligne de code manipulant des secrets ?
