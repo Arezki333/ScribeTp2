@@ -19,3 +19,4 @@ if not GROQ_API_KEY:
 # Seul endroit du projet où les noms de modèles sont définis.
 STT_MODEL = "whisper-large-v3-turbo"
 LLM_MODEL = "llama-3.3-70b-versatile"
+MODERATION_MODEL = "llama-3.1-8b-instant"

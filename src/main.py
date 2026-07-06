@@ -5,6 +5,7 @@ import datetime
 import sys
 
 from transcription import transcribe
+from moderation import is_legitimate
 from summary import summarize
 
 
@@ -17,6 +18,16 @@ def main() -> None:
     try:
         transcript = transcribe(args.audio_path)
     except (FileNotFoundError, RuntimeError) as exc:
+        sys.exit(f"Erreur : {exc}")
+
+    print("Vérification du contenu...")
+    try:
+        if not is_legitimate(transcript):
+            sys.exit(
+                "Scribe ne peut pas traiter cet enregistrement : son contenu "
+                "semble chercher à détourner l'outil de son usage prévu."
+            )
+    except RuntimeError as exc:
         sys.exit(f"Erreur : {exc}")
 
     print("Rédaction du compte rendu en cours...")
