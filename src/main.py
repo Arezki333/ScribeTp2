@@ -24,11 +24,6 @@ def main() -> None:
         sys.exit(f"Erreur : {exc}")
 
     timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    os.makedirs(TRANSCRIPTIONS_DIR, exist_ok=True)
-    transcript_path = os.path.join(TRANSCRIPTIONS_DIR, f"transcription-{timestamp}.txt")
-    with open(transcript_path, "w", encoding="utf-8") as f:
-        f.write(transcript)
-    print(f"Transcription brute sauvegardée dans {transcript_path}")
 
     print("Vérification du contenu...")
     try:
@@ -48,7 +43,8 @@ def main() -> None:
 
     print("\n" + report)
 
-    output_path = f"compte-rendu-{timestamp}.md"
+    os.makedirs(TRANSCRIPTIONS_DIR, exist_ok=True)
+    output_path = os.path.join(TRANSCRIPTIONS_DIR, f"compte-rendu-{timestamp}.md")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(report)
     print(f"\nCompte rendu sauvegardé dans {output_path}")
