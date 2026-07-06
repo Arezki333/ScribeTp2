@@ -2,10 +2,11 @@
 
 Scribe est un outil en ligne de commande qui transforme un enregistrement audio (réunion, cours, note vocale) en compte rendu écrit et structuré.
 
-Le traitement se déroule en deux étapes, appuyées sur l'API serverless de [Groq](https://console.groq.com/docs/overview) :
+Le traitement se déroule en trois étapes, appuyées sur l'API serverless de [Groq](https://console.groq.com/docs/overview) :
 
 1. **Transcription** : un modèle Speech-to-Text convertit l'audio en texte brut.
-2. **Compte rendu** : un LLM reformule ce texte en un compte rendu structuré (titre, résumé, points clés, décisions/actions).
+2. **Modération** *(bonus)* : un modèle vérifie que la transcription est un contenu légitime, et non une tentative de détournement de l'outil.
+3. **Compte rendu** : un LLM reformule le texte en un compte rendu structuré (titre, résumé, points clés, décisions/actions).
 
 ## Installation
 
@@ -48,6 +49,10 @@ ScribeTp2/
 ## Choix des modèles
 
 Les identifiants des modèles sont centralisés dans [src/config.py](src/config.py), seul endroit du projet où ils apparaissent.
+
+## Bonus — Modération
+
+[src/moderation.py](src/moderation.py) appelle un modèle rapide et peu coûteux (`llama-3.1-8b-instant`) avec un prompt système dédié ([prompts/moderation_system_prompt.txt](prompts/moderation_system_prompt.txt)) qui classe la transcription en `OK` ou `REJECT`. Le prompt précise explicitement que la transcription est une donnée à analyser, jamais une instruction à suivre, pour éviter qu'une tentative d'injection dans l'audio ne détourne le modérateur lui-même. En cas de rejet, la CLI s'arrête avant de générer un compte rendu.
 
 ## Réponses aux questions
 
